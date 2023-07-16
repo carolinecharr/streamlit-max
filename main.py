@@ -32,9 +32,30 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Display the table with columns
+# Set the same width for all columns in the table
+column_width = st.sidebar.slider("Column Width", min_value=50, max_value=500, value=100)
+st.write(f'<style>div.row-widget.stRadio > div{column_width}px</style>', unsafe_allow_html=True)
+
+# Display the table with enhanced visual
 columns_to_display = filtered_leads.columns.tolist()
-st.table(filtered_leads[columns_to_display])
+
+# Set table width to fit the content
+table_width = len(columns_to_display) * column_width
+st.markdown(f'<style>div[data-testid="stTable"][role="table"] table{{width: {table_width}px !important;}}</style>', unsafe_allow_html=True)
+
+# Customize the cell values for specific columns
+cell_formatters = {
+    'LinkedIn': lambda link: f'<a href="{link}" target="_blank">{link}</a>',
+    'Email': lambda email: f'<a href="mailto:{email}">{email}</a>'
+}
+
+# Display the table with wrapped content for long entries
+table_data = filtered_leads[columns_to_display].copy()
+for column in columns_to_display:
+    if column in cell_formatters:
+        table_data[column] = table_data[column].apply(cell_formatters[column])
+
+st.table(table_data)
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
