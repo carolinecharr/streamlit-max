@@ -7,14 +7,19 @@ leads_data = pd.read_csv('Leads.csv')
 # Define the filter options for Name, Location, and Stage
 filter_name = st.text_input('Filter by Name')
 filter_location = st.text_input('Filter by Location')
-filter_stage = st.selectbox('Filter by Stage', ['', '1', '2', '3'])
+filter_stage = st.selectbox('Filter by Stage', ['', '1', '2', '3'], index=0)
 
 # Apply filters to the leads data
 filtered_leads = leads_data[
     (leads_data['First Name'].str.contains(filter_name, case=False)) &
-    (leads_data['Location'].str.contains(filter_location, case=False)) &
-    (leads_data['Stage'].astype(str) == filter_stage)
+    (leads_data['Location'].str.contains(filter_location, case=False))
 ]
+
+if filter_stage != '':
+    filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
+
+# Set default value of 1 for leads with an empty stage
+filtered_leads.loc[filtered_leads['Stage'].isnull(), 'Stage'] = 1
 
 # Display the filtered leads table with editable stage values
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
