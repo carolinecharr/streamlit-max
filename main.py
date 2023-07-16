@@ -4,12 +4,12 @@ import pandas as pd
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
 
-# Set page title
-st.title('Collecting Leads from LinkedIn')
-
 # Centered logo
 logo = 'vs-logo.png'
-st.image(logo, width=100, use_column_width='always')
+st.image(logo, width=100)
+
+# Set page title
+st.title('Collecting Leads from LinkedIn')
 
 # Define the filter options for Name, Location, and Stage
 col1, col2, col3 = st.columns(3)
