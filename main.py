@@ -10,7 +10,7 @@ st.title('Collecting Leads from LinkedIn')
 # Define the filter options for Name, Location, and Stage
 filter_name = st.text_input('Filter by Name')
 filter_location = st.text_input('Filter by Location')
-filter_stage = st.selectbox('Filter by Stage', ['', '1', '2', '3'], index=0)
+filter_stage = st.selectbox('Filter by Stage', ['', '1', '2', '3'])
 
 # Apply filters to the leads data
 filtered_leads = leads_data[
