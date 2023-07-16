@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import ipywidgets as widgets
-from IPython.display import display
 
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
@@ -29,31 +27,27 @@ filtered_leads.loc[filtered_leads['Stage'].isnull(), 'Stage'] = 1
 # Create a copy of the filtered leads for display and updating
 updated_leads = filtered_leads.copy()
 
-# Display the table with editable stage values
+# Create an editable table for the leads
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
-editable_leads = updated_leads[columns_to_display].copy()
 
-# Create a custom function for updating the stage value
-def update_stage_value(row_index, column_name, new_value):
-    editable_leads.at[row_index, column_name] = new_value
+# Helper function to update stage value on cell update
+def update_stage_value(updated_stage, row_index, col_index):
+    updated_leads.at[row_index, columns_to_display[col_index]] = updated_stage
 
-# Create an editable table cell for the stage column
-for idx, row in editable_leads.iterrows():
-    cell_value = widgets.Dropdown(
-        options=['', '1', '2', '3'],
-        value=str(row['Stage']),
-        layout=widgets.Layout(width='100px')
-    )
-    display(cell_value)
-    cell_value.observe(
-        lambda change, row_index=idx, col_name='Stage': update_stage_value(row_index, col_name, change.new),
-        names='value'
-    )
+# Display the table with editable stage values
+for idx, row in updated_leads.iterrows():
+    for col_idx, column in enumerate(columns_to_display):
+        if column == 'Stage':
+            updated_stage = st.selectbox(f"Lead {idx + 1} Stage", ['', '1', '2', '3'], index=row[column]-1)
+            if updated_stage != '':
+                update_stage_value(int(updated_stage), idx, col_idx)
+        else:
+            st.write(row[column])
 
-st.table(editable_leads)
+st.table(updated_leads[columns_to_display])
 
 # Update the leads_data with the updated stage values
-leads_data.update(editable_leads)
+leads_data.update(updated_leads)
 
 # Save the updated leads data to the CSV file
-leads_data.to_csv('leads.csv', index=False)
+leads_data.to_csv('Leads.csv', index=False)
