@@ -32,4 +32,4 @@ st.table(updated_leads.style.set_table_styles([
 leads_data.update(updated_leads)
 
 # Save the updated leads data to the CSV file
-leads_data.to_csv('leads.csv', index=False)
+leads_data.to_csv('Leads.csv', index=False)
