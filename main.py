@@ -45,3 +45,28 @@ st.table(filtered_leads)
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
 # leads_data.to_csv('Leads.csv', index=False)
+
+from bs4 import BeautifulSoup
+
+# Sample string
+string_content = '''
+This is a sample string containing some text.
+There are multiple lines and sentences in this string.
+We will use BeautifulSoup to parse and extract information.
+'''
+
+# Create BeautifulSoup object
+soup = BeautifulSoup(string_content, 'html.parser')
+
+# Extract information from the string
+lines = soup.get_text().split('\n')
+sentences = [sentence.strip() for line in lines for sentence in line.split('.') if sentence.strip()]
+
+# Print the extracted information
+print("Lines:")
+for line in lines:
+    print(line)
+
+print("\nSentences:")
+for sentence in sentences:
+    print(sentence)
