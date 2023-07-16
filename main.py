@@ -42,12 +42,6 @@ if filter_stage != 'All':
 # Display the table with enhanced visual
 columns_to_display = filtered_leads.columns.tolist()
 
-# Customize the cell values for specific columns
-cell_formatters = {
-    'LinkedIn': lambda link: f'<a href="{link}" target="_blank">{link}</a>',
-    'Email': lambda email: f'<a href="mailto:{email}">{email}</a>'
-}
-
 # Display the table with wrapped content for long entries
 table_data = filtered_leads[columns_to_display].copy()
 for column in columns_to_display:
