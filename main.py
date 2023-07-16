@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from streamlit_aggrid import AgGrid, GridOptionsBuilder, AgGridConfigBuilder
 
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
@@ -32,29 +33,26 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
+# Configure the editable table using streamlit-aggrid
+gb = GridOptionsBuilder.from_dataframe(filtered_leads)
+gb.configure_default_column(groupable=True, editable=True)
+grid_options = gb.build()
+
 # Create a copy of the filtered leads for display and updating
 updated_leads = filtered_leads.copy()
 
-# Create an editable table for the leads
-columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
+# Display the editable table
+ag = AgGrid(
+    updated_leads,
+    gridOptions=grid_options,
+    width='100%',
+    data_return_mode='AS_INPUT',
+    update_mode='VALUE_CHANGED',
+    fit_columns_on_grid_load=True,
+)
 
-# Helper function to update stage value on cell update
-def update_stage_value(updated_stage, row_index):
-    updated_leads.at[row_index, 'Stage'] = updated_stage
-
-# Display the table with editable stage values
-for idx, row in updated_leads.iterrows():
-    for column in columns_to_display:
-        if column == 'Stage':
-            if filter_stage == 'All':
-                st.write(row[column])
-            else:
-                updated_stage = st.selectbox(f"Lead {idx + 1} Stage", ['', '1', '2', '3'], index=row[column] - 1)
-                if updated_stage != '':
-                    update_stage_value(int(updated_stage), idx)
-        else:
-            st.write(row[column])
+# Update the leads_data with the updated stage values
+leads_data.update(updated_leads)
 
 # Save the updated leads data to the CSV file (optional)
-# leads_data.update(updated_leads)
 # leads_data.to_csv('Leads.csv', index=False)
