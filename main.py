@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import ipywidgets as widgets
+from IPython.display import display
 
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
@@ -29,23 +31,29 @@ updated_leads = filtered_leads.copy()
 
 # Display the table with editable stage values
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
+editable_leads = updated_leads[columns_to_display].copy()
 
-# Helper function to update stage value on cell click
+# Create a custom function for updating the stage value
 def update_stage_value(row_index, column_name, new_value):
-    updated_leads.at[row_index, column_name] = new_value
+    editable_leads.at[row_index, column_name] = new_value
 
-# Iterate through each lead and create an editable table cell for the stage column
-for idx, row in updated_leads.iterrows():
-    cell_value = st.selectbox(f"Lead {idx + 1} Stage", ['', '1', '2', '3'], index=row['Stage'])
-    if cell_value != '':
-        update_stage_value(idx, 'Stage', int(cell_value))
+# Create an editable table cell for the stage column
+for idx, row in editable_leads.iterrows():
+    cell_value = widgets.Dropdown(
+        options=['', '1', '2', '3'],
+        value=str(row['Stage']),
+        layout=widgets.Layout(width='100px')
+    )
+    display(cell_value)
+    cell_value.observe(
+        lambda change, row_index=idx, col_name='Stage': update_stage_value(row_index, col_name, change.new),
+        names='value'
+    )
 
-st.table(updated_leads[columns_to_display].style.set_table_styles([
-    {'selector': 'th', 'props': [('max-width', '150px')]}  # Set maximum width for all columns
-]))
+st.table(editable_leads)
 
 # Update the leads_data with the updated stage values
-leads_data.update(updated_leads)
+leads_data.update(editable_leads)
 
 # Save the updated leads data to the CSV file
 leads_data.to_csv('leads.csv', index=False)
