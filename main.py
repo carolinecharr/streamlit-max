@@ -32,22 +32,9 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Display the table with enhanced visual
+# Display the table with columns
 columns_to_display = filtered_leads.columns.tolist()
-
-# Customize the cell values for specific columns
-cell_formatters = {
-    'LinkedIn': lambda link: f'<a href="{link}" target="_blank">{link}</a>',
-    'Email': lambda email: f'<a href="mailto:{email}">{email}</a>'
-}
-
-# Display the table with wrapped content for long entries
-table_data = filtered_leads[columns_to_display].copy()
-for column in columns_to_display:
-    if column in cell_formatters:
-        table_data[column] = table_data[column].apply(cell_formatters[column])
-
-st.table(table_data)
+st.table(filtered_leads[columns_to_display])
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
