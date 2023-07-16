@@ -24,15 +24,23 @@ if filter_stage != '':
 # Set default value of 1 for leads with an empty stage
 filtered_leads.loc[filtered_leads['Stage'].isnull(), 'Stage'] = 1
 
-# Display the filtered leads table with editable stage values
+# Create a copy of the filtered leads for display and updating
+updated_leads = filtered_leads.copy()
+
+# Display the table with editable stage values
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
-updated_leads = filtered_leads[columns_to_display].copy()
 
+# Helper function to update stage value on cell click
+def update_stage_value(row_index, column_name, new_value):
+    updated_leads.at[row_index, column_name] = new_value
+
+# Iterate through each lead and create an editable table cell for the stage column
 for idx, row in updated_leads.iterrows():
-    new_stage = st.selectbox(f"Lead {idx + 1} Stage", ['', '1', '2', '3'], index=row['Stage'])
-    updated_leads.at[idx, 'Stage'] = int(new_stage) if new_stage != '' else None
+    cell_value = st.selectbox(f"Lead {idx + 1} Stage", ['', '1', '2', '3'], index=row['Stage'])
+    if cell_value != '':
+        update_stage_value(idx, 'Stage', int(cell_value))
 
-st.table(updated_leads.style.set_table_styles([
+st.table(updated_leads[columns_to_display].style.set_table_styles([
     {'selector': 'th', 'props': [('max-width', '150px')]}  # Set maximum width for all columns
 ]))
 
