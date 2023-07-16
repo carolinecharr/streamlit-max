@@ -4,10 +4,6 @@ import pandas as pd
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
 
-# Centered logo
-logo = 'vs-logo.png'
-st.image(logo, width=100)
-
 # Set page title
 st.title('Collecting Leads from LinkedIn')
 
@@ -51,7 +47,13 @@ for column in columns_to_display:
     if column in cell_formatters:
         table_data[column] = table_data[column].apply(cell_formatters[column])
 
-st.table(table_data)
+# Add margin to the table
+table_html = f"""
+<div style="margin-top: 30px;">
+{table_data.to_html(escape=False, index=False)}
+</div>
+"""
+st.markdown(table_html, unsafe_allow_html=True)
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
