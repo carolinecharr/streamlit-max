@@ -5,10 +5,10 @@ import pandas as pd
 leads_data = pd.read_csv('Leads.csv')
 
 # Set page title
-st.title('Collecting Leads from Linke')
+st.title('Collecting Leads')
 
 # Define the filter options for Name, Location, and Stage
-col1, col2, col3 = st.beta_columns(3)
+col1, col2, col3 = st.columns(3)
 
 # Text input for Name filter
 filter_name = col1.text_input('Filter by Name')
