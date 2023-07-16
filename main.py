@@ -32,9 +32,9 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Remove the index column from the displayed table
+# Remove the 'ID' column from the displayed table
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
-filtered_leads = filtered_leads[columns_to_display].reset_index(drop=True)
+filtered_leads = filtered_leads[columns_to_display]
 
 # Create a table to display the filtered leads
 st.table(filtered_leads)
