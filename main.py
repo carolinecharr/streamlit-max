@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load the leads data from the CSV file
-leads_data = pd.read_csv('leads.csv')
+leads_data = pd.read_csv('Leads.csv')
 
 # Define the filter options for Name, Location, and Stage
 filter_name = st.sidebar.text_input('Filter by Name')
