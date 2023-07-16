@@ -4,6 +4,10 @@ import pandas as pd
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
 
+# Display the logo
+logo = 'vs-logo.png'
+st.image(logo, use_column_width=True)
+
 # Set page title
 st.title('Collecting Leads from LinkedIn')
 
@@ -32,9 +36,22 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Display the table with columns
+# Display the table with enhanced visual
 columns_to_display = filtered_leads.columns.tolist()
-st.table(filtered_leads[columns_to_display])
+
+# Customize the cell values for specific columns
+cell_formatters = {
+    'LinkedIn': lambda link: f'<a href="{link}" target="_blank">{link}</a>',
+    'Email': lambda email: f'<a href="mailto:{email}">{email}</a>'
+}
+
+# Display the table with wrapped content for long entries
+table_data = filtered_leads[columns_to_display].copy()
+for column in columns_to_display:
+    if column in cell_formatters:
+        table_data[column] = table_data[column].apply(cell_formatters[column])
+
+st.table(table_data)
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
