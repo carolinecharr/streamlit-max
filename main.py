@@ -7,6 +7,10 @@ leads_data = pd.read_csv('Leads.csv')
 # Set page title
 st.title('Collecting Leads from LinkedIn')
 
+# Centered logo
+logo = 'vs-logo.png'
+st.image(logo, width=100, use_column_width='always')
+
 # Define the filter options for Name, Location, and Stage
 col1, col2, col3 = st.columns(3)
 
@@ -19,6 +23,9 @@ filter_location = col2.text_input('Filter by Location')
 # Selectbox for Stage filter
 stage_options = ['All', '1', '2', '3']
 filter_stage = col3.selectbox('Filter by Stage', stage_options)
+
+# Add spacing between filters and table
+st.markdown('<br>', unsafe_allow_html=True)
 
 # Apply filters to the leads data
 filtered_leads = leads_data.copy()
@@ -47,13 +54,7 @@ for column in columns_to_display:
     if column in cell_formatters:
         table_data[column] = table_data[column].apply(cell_formatters[column])
 
-# Add margin to the table
-table_html = f"""
-<div style="margin-top: 30px;">
-{table_data.to_html(escape=False, index=False)}
-</div>
-"""
-st.markdown(table_html, unsafe_allow_html=True)
+st.table(table_data)
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
