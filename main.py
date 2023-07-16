@@ -5,7 +5,7 @@ import pandas as pd
 leads_data = pd.read_csv('Leads.csv')
 
 # Set page title
-st.title('Collecting Leads from')
+st.title('Collecting Leads from LinkedIn')
 
 # Define the filter options for Name, Location, and Stage
 col1, col2, col3 = st.columns(3)
@@ -32,9 +32,9 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Remove the 'ID' column from the displayed table
+# Remove the index column from the displayed table
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
-filtered_leads = filtered_leads[columns_to_display]
+filtered_leads = filtered_leads[columns_to_display].reset_index(drop=True)
 
 # Create a table to display the filtered leads
 st.table(filtered_leads)
