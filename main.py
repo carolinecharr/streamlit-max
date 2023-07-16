@@ -32,9 +32,12 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Create a table to display the filtered leads
+# Remove the 'ID' column from the displayed table
 columns_to_display = ['First Name', 'Last Name', 'Job Title', 'Location', 'Stage']
-st.table(filtered_leads[columns_to_display])
+filtered_leads = filtered_leads[columns_to_display]
+
+# Create a table to display the filtered leads
+st.table(filtered_leads)
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.to_csv('Leads.csv', index=False)
