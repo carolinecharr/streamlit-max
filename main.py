@@ -32,13 +32,9 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Display the table with one row per lead
+# Display the table with columns
 columns_to_display = filtered_leads.columns.tolist()
-for idx, row in filtered_leads.iterrows():
-    st.write('---')
-    st.write(f"**Lead {idx + 1}**")
-    for column in columns_to_display:
-        st.write(f"**{column}:** {row[column]}")
+st.table(filtered_leads[columns_to_display])
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
