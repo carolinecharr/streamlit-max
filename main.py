@@ -32,27 +32,13 @@ if filter_location:
 if filter_stage != 'All':
     filtered_leads = filtered_leads[filtered_leads['Stage'].astype(str) == filter_stage]
 
-# Create an editable table for the leads
+# Display the table with one row per lead
 columns_to_display = filtered_leads.columns.tolist()
-
-# Helper function to update stage value on cell update
-def update_stage_value(updated_stage, row_index):
-    filtered_leads.at[row_index, 'Stage'] = updated_stage
-
-# Display the table with editable stage values
-with st.form(key='lead_form'):
-    for idx, row in filtered_leads.iterrows():
-        for column in columns_to_display:
-            if column == 'Stage':
-                if filter_stage == 'All':
-                    st.write(row[column])
-                else:
-                    updated_stage = st.selectbox(f"Lead {idx + 1} Stage", ['', '1', '2', '3'], index=row[column] - 1)
-                    if updated_stage != '':
-                        update_stage_value(int(updated_stage), idx)
-            else:
-                st.write(row[column])
-    st.form_submit_button(label='Save')
+for idx, row in filtered_leads.iterrows():
+    st.write('---')
+    st.write(f"**Lead {idx + 1}**")
+    for column in columns_to_display:
+        st.write(f"**{column}:** {row[column]}")
 
 # Save the updated leads data to the CSV file (optional)
 # leads_data.update(filtered_leads)
