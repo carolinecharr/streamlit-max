@@ -4,6 +4,9 @@ import pandas as pd
 # Load the leads data from the CSV file
 leads_data = pd.read_csv('Leads.csv')
 
+# Set page title
+st.title('Collecting Leads from LinkedIn')
+
 # Define the filter options for Name, Location, and Stage
 filter_name = st.text_input('Filter by Name')
 filter_location = st.text_input('Filter by Location')
