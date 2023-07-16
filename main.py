@@ -6,7 +6,7 @@ leads_data = pd.read_csv('Leads.csv')
 
 # Display the logo
 logo = 'vs-logo.png'
-st.image(logo, use_column_width=True)
+st.image(logo, width=200)
 
 # Set page title
 st.title('Collecting Leads from LinkedIn')
